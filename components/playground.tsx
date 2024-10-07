@@ -39,11 +39,11 @@ const MessageBubble = motion(motion.div)
 const WelcomeMessage = () => (
   <TypeAnimation
     sequence={[
-      "Hey!\nWelcome to Vamshi's Playground.",
+      "Hey!\nWelcome to Vamshi&apos;s Playground.",
       1000,
-      "Hey!\nWelcome to Vamshi's Playground.\nHere you can access the latest Image generation models and text generation models for free.",
+      "Hey!\nWelcome to Vamshi&apos;s Playground.\nHere you can access the latest Image generation models and text generation models for free.",
       1000,
-      "Hey!\nWelcome to Vamshi's Playground.\nHere you can access the latest Image generation models and text generation models for free.\nHow can I help you?",
+      "Hey!\nWelcome to Vamshi&apos;s Playground.\nHere you can access the latest Image generation models and text generation models for free.\nHow can I help you?",
     ]}
     wrapper="div"
     speed={50}
@@ -188,7 +188,7 @@ export function Playground() {
             animate={{ scale: 1 }}
             transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
           >
-            ⚡ Vamshi's Chatbot 
+            ⚡ Vamshi&apos;s Chatbot 
           </motion.h1>
           <span className="text-gray-400">PLAYGROUND</span>
         </div>
