@@ -179,30 +179,30 @@ export function Playground() {
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.2, duration: 0.5 }}
-        className="flex items-center justify-between p-4 border-b border-gray-700 bg-gray-800 bg-opacity-50 backdrop-blur-sm"
+        className="flex items-center justify-between p-2 sm:p-4 border-b border-gray-700 bg-gray-800 bg-opacity-50 backdrop-blur-sm"
       >
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-2 sm:space-x-4">
           <motion.h1 
-            className="text-xl font-semibold"
+            className="text-lg sm:text-xl font-semibold"
             initial={{ scale: 0.9 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
           >
             ⚡ Vamshi&apos;s Chatbot 
           </motion.h1>
-          <span className="text-gray-400">PLAYGROUND</span>
+          <span className="text-xs sm:text-sm text-gray-400">PLAYGROUND</span>
         </div>
         <motion.div
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          <Button variant="outline" size="sm" className="text-gray-400 border-gray-700 hover:bg-gray-700 transition-colors duration-200">
-            <ExternalLink className="w-4 h-4 mr-2" />
+          <Button variant="outline" size="sm" className="text-xs sm:text-sm text-gray-400 border-gray-700 hover:bg-gray-700 transition-colors duration-200">
+            <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
             API Docs
           </Button>
         </motion.div>
       </motion.header>
-      <main className="flex-grow overflow-auto p-4 space-y-4">
+      <main className="flex-grow overflow-auto p-2 sm:p-4 space-y-2 sm:space-y-4">
         <AnimatePresence>
           {messages.map((message, index) => (
             <MessageBubble
@@ -214,7 +214,7 @@ export function Playground() {
               className={`flex ${message.role === 'assistant' ? 'justify-start' : 'justify-end'}`}
             >
               <motion.div 
-                className={`max-w-2xl p-3 rounded-lg ${message.role === 'assistant' ? 'bg-gray-800' : 'bg-blue-600'} shadow-lg`}
+                className={`max-w-[85%] sm:max-w-2xl p-2 sm:p-3 rounded-lg ${message.role === 'assistant' ? 'bg-gray-800' : 'bg-blue-600'} shadow-lg`}
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.2 }}
               >
@@ -240,7 +240,7 @@ export function Playground() {
                           width={500}
                           height={300}
                           className="w-full h-auto rounded cursor-pointer transition-transform duration-200 hover:scale-105"
-                          style={{ maxHeight: '300px', objectFit: 'contain' }}
+                          style={{ maxHeight: '200px', objectFit: 'contain' }}
                           onClick={() => openImageModal(message.image!)}
                         />
                         <motion.div
@@ -250,10 +250,10 @@ export function Playground() {
                           <Button 
                             variant="ghost" 
                             size="sm" 
-                            className="absolute top-2 right-2 bg-gray-800 bg-opacity-50 hover:bg-opacity-75 transition-colors duration-200"
+                            className="absolute top-1 right-1 sm:top-2 sm:right-2 bg-gray-800 bg-opacity-50 hover:bg-opacity-75 transition-colors duration-200"
                             onClick={() => openImageModal(message.image!)}
                           >
-                            <Maximize2 className="w-4 h-4" />
+                            <Maximize2 className="w-3 h-3 sm:w-4 sm:h-4" />
                           </Button>
                         </motion.div>
                       </motion.div>
@@ -263,8 +263,8 @@ export function Playground() {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                       >
-                        <Button variant="ghost" size="sm" className="mt-2 text-gray-400 hover:text-white transition-colors duration-200" onClick={() => handleCopyMessage(message.content)}>
-                          <Copy className="w-4 h-4 mr-2" />
+                        <Button variant="ghost" size="sm" className="mt-1 sm:mt-2 text-xs sm:text-sm text-gray-400 hover:text-white transition-colors duration-200" onClick={() => handleCopyMessage(message.content)}>
+                          <Copy className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
                           Copy
                         </Button>
                       </motion.div>
@@ -281,7 +281,7 @@ export function Playground() {
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.2, duration: 0.5 }}
-        className="p-4 border-t border-gray-700 bg-gray-800 bg-opacity-50 backdrop-blur-sm"
+        className="p-2 sm:p-4 border-t border-gray-700 bg-gray-800 bg-opacity-50 backdrop-blur-sm"
       >
         <div className="flex items-center space-x-2 mb-2">
           <ModelSelector onSelectModel={setModel} />
@@ -290,9 +290,9 @@ export function Playground() {
             transition={{ duration: 0.5 }}
           >
             {isImageGenerationModel ? (
-              <ImageIcon className="w-5 h-5 text-blue-500" />
+              <ImageIcon className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500" />
             ) : (
-              <Type className="w-5 h-5 text-green-500" />
+              <Type className="w-4 h-4 sm:w-5 sm:h-5 text-green-500" />
             )}
           </motion.div>
         </div>
@@ -302,12 +302,12 @@ export function Playground() {
             whileTap={{ scale: 0.9 }}
           >
             <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white transition-colors duration-200" onClick={handleClearChat}>
-              <Trash className="w-5 h-5" />
+              <Trash className="w-4 h-4 sm:w-5 sm:h-5" />
             </Button>
           </motion.div>
           <Textarea
-            className="flex-grow bg-gray-800 border-gray-700 text-white resize-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
-            placeholder={isImageGenerationModel ? "Describe the image you want to generate..." : "Ask anything..."}
+            className="flex-grow bg-gray-800 border-gray-700 text-white resize-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 text-sm sm:text-base"
+            placeholder={isImageGenerationModel ? "Describe the image..." : "Ask anything..."}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={(e) => {
@@ -326,9 +326,9 @@ export function Playground() {
               variant="default"
               onClick={handleSendMessage}
               disabled={isLoading}
-              className="bg-blue-600 hover:bg-blue-700 transition-colors duration-200"
+              className="bg-blue-600 hover:bg-blue-700 transition-colors duration-200 text-xs sm:text-sm"
             >
-              {isLoading ? <LoadingAnimation /> : <Send className="w-5 h-5 mr-2" />}
+              {isLoading ? <LoadingAnimation /> : <Send className="w-4 h-4 sm:w-5 sm:h-5 mr-1 sm:mr-2" />}
               {isLoading ? 'Generating...' : (isImageGenerationModel ? 'Generate' : 'Submit')}
             </Button>
           </motion.div>
