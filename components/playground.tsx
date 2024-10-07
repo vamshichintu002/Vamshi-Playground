@@ -39,11 +39,9 @@ const MessageBubble = motion(motion.div)
 const WelcomeMessage = () => (
   <TypeAnimation
     sequence={[
-      "Hey!\nWelcome to Vamshi&apos;s Playground.",
+      "Hi there!\nWelcome to Vamshi’s Playground. Explore the latest image and text generation models, all available for free.",
       1000,
-      "Hey!\nWelcome to Vamshi&apos;s Playground.\nHere you can access the latest Image generation models and text generation models for free.",
-      1000,
-      "Hey!\nWelcome to Vamshi&apos;s Playground.\nHere you can access the latest Image generation models and text generation models for free.\nHow can I help you?",
+      "How can I assist you today?",
     ]}
     wrapper="div"
     speed={50}
