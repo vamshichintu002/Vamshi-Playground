@@ -35,27 +35,53 @@ The goal is to provide a simple interface where users can:
 
 ```
 playground
+├── .next
+│   ├── cache
+│   │   ├── swc
+│   │   │   ├── plugins
+│   │   │   │   ├── v7_windows_x86_64_0.106.15
+│   │   ├── webpack
+│   │   │   ├── client-development
+│   │   │   ├── client-development-fallback
+│   │   │   ├── server-development
+│   ├── server
+│   │   ├── app
+│   │   │   ├── api
+│   │   │   │   ├── groq
+│   │   │   │   ├── huggingface
+│   │   │   │   ├── replicate
+│   │   │   ├── _not-found
+│   │   ├── pages
+│   │   ├── vendor-chunks
+│   ├── static
+│   │   ├── chunks
+│   │   │   ├── app
+│   │   │   │   ├── _not-found
+│   │   │   ├── fallback
+│   │   │   │   ├── pages
+│   │   │   ├── pages
+│   │   ├── css
+│   │   │   ├── app
+│   │   ├── development
+│   │   ├── media
+│   │   ├── webpack
+│   │   │   ├── app
+│   ├── types
+│   │   ├── app
+│   │   │   ├── api
+│   │   │   │   ├── groq
+│   │   │   │   ├── huggingface
+│   │   │   │   ├── replicate
 ├── app
-│   ├── page.tsx                    # Main entry point, home page with model list and chat interface
-│   ├── api                         # API folder for backend logic
-│   │   └── replicate.ts            # API route for interacting with the Replicate API
-├── components                      # Reusable components
-│   ├── ModelSelector.tsx           # Component to list and select AI models
-│   ├── ChatBox.tsx                 # Component to display chat and handle input/output
-│   ├── StreamingAnswer.tsx         # Component to stream AI responses
+│   ├── api
+│   │   ├── groq
+│   │   ├── huggingface
+│   │   ├── replicate
+│   ├── fonts
+├── components
+│   ├── ui
+├── instructions
 ├── lib
-│   └── replicate.ts               # Utility function to handle Replicate API calls
-├── styles
-│   └── globals.css                # Tailwind CSS or global styles
-├── public
-│   └── favicon.ico                # Favicon
-├── .env.local                     # Environment variables (API keys, etc.)
-├── next.config.js                 # Next.js configuration
-├── tailwind.config.js             # Tailwind configuration
-├── postcss.config.js              # PostCSS configuration
-├── tsconfig.json                  # TypeScript configuration
-├── package.json                   # Dependencies and scripts
-└── README.md                      # Project documentation
 ```
 
 ## Detailed Documentation and Example Code

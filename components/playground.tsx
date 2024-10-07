@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Send, ExternalLink, Copy, Trash, Maximize2, Image as ImageIcon, Type } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import dynamic from 'next/dynamic'
+import Image from 'next/image'
 
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
@@ -223,7 +224,9 @@ export function Playground() {
                   <WelcomeMessage />
                 ) : (
                   <>
-                    <p className="whitespace-pre-wrap">{message.content}</p>
+                    <p className="whitespace-pre-wrap">
+                      {message.content.replace(/'/g, "&apos;")}
+                    </p>
                     {message.image && (
                       <motion.div 
                         className="mt-2 relative"
@@ -231,9 +234,11 @@ export function Playground() {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.2, duration: 0.3 }}
                       >
-                        <img 
-                          src={message.image} 
-                          alt="Generated image" 
+                        <Image 
+                          src={message.image}
+                          alt="Generated image"
+                          width={500}
+                          height={300}
                           className="w-full h-auto rounded cursor-pointer transition-transform duration-200 hover:scale-105"
                           style={{ maxHeight: '300px', objectFit: 'contain' }}
                           onClick={() => openImageModal(message.image!)}
@@ -347,7 +352,13 @@ export function Playground() {
               transition={{ duration: 0.3 }}
               className="max-w-4xl max-h-[90vh] p-4 bg-gray-800 rounded-lg overflow-auto"
             >
-              <img src={modalImage} alt="Full size" className="max-w-full max-h-full object-contain" />
+              <Image 
+                src={modalImage}
+                alt="Full size"
+                width={1200}
+                height={800}
+                className="max-w-full max-h-full object-contain"
+              />
             </motion.div>
           </motion.div>
         )}
