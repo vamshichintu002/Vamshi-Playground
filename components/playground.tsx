@@ -39,12 +39,12 @@ const MessageBubble = motion(motion.div)
 const WelcomeMessage = () => (
   <TypeAnimation
     sequence={[
-      "Hi there!\nWelcome to Vamshi’s Playground. Explore the latest image and text generation models, all available for free.",
-      1000,
+      "Hi there!\nWelcome to Vamshi's Playground. Explore the latest image and text generation models, all available for free.",
+      100, // Reduced delay from 500 to 100
       "How can I assist you today?",
     ]}
     wrapper="div"
-    speed={50}
+    speed={70} // Increased speed from 1 to 50 (higher number means faster typing)
     style={{ whiteSpace: 'pre-line', display: 'inline-block' }}
     repeat={0}
   />
