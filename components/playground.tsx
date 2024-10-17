@@ -59,14 +59,7 @@ const WelcomeMessage = () => (
   />
 )
 
-const CodeBlock = ({ content }: { content: string }) => (
-  <div className="my-2 overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800">
-    <div className="bg-gray-200 dark:bg-gray-700 px-4 py-2 font-mono text-sm">Python Code Output</div>
-    <pre className="p-4 overflow-x-auto">
-      <code>{content}</code>
-    </pre>
-  </div>
-)
+
 
 const ResponseMetrics = ({ tokensPerSecond, totalTokens, timeTaken }: { tokensPerSecond: number, totalTokens: number, timeTaken: number }) => (
   <div className="flex flex-wrap justify-between items-center text-xs mt-2 px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded-md">
