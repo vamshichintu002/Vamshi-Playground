@@ -5,7 +5,7 @@ interface ModelSelectorProps {
   onSelectModel: (model: string) => void;
 }
 
-const models = {
+export const models = {
   textGeneration: [
     'gemma2-9b-it',
     'gemma-7b-it',
@@ -21,7 +21,15 @@ const models = {
     'microsoft/phi-2',
     'microsoft/Phi-3.5-mini-instruct',
     'HuggingFaceH4/zephyr-7b-beta',
+  ],
+  codeGeneration:[
     'Meta-Llama-3.1-8B-Instruct',
+    'Meta-Llama-3.1-70B-Instruct',
+    'Llama-3.1-70B-Dracarys',
+    'Llama-3.1-8B-Enigma',
+    'Llama-3.1-70B-Hermes-3',
+    'Llama-3.1-8B-ArliAI-RPMax-v1.1',
+    'Mistral-Nemo-12B-Instruct-2407',
   ],
   imageGeneration: [
     'XLabs-AI/flux-RealismLora',
@@ -46,6 +54,14 @@ export function ModelSelector({ onSelectModel }: ModelSelectorProps) {
         <SelectGroup>
           <SelectLabel>Text Generation</SelectLabel>
           {models.textGeneration.map((model) => (
+            <SelectItem key={model} value={model}>
+              {model}
+            </SelectItem>
+          ))}
+        </SelectGroup>
+        <SelectGroup>
+          <SelectLabel>Code Generation</SelectLabel>
+          {models.codeGeneration.map((model) => (
             <SelectItem key={model} value={model}>
               {model}
             </SelectItem>

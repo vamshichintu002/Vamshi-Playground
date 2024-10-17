@@ -1,0 +1,85 @@
+.message {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+
+.message h1, .message h2, .message h3, .message h4, .message h5, .message h6 {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  font-weight: bold;
+}
+
+.message h1 { font-size: 1.5em; }
+.message h2 { font-size: 1.3em; }
+.message h3 { font-size: 1.1em; }
+
+.message p {
+  margin-bottom: 1em;
+}
+
+.message strong {
+  font-weight: bold;
+  color: #0840da;
+}
+
+.message em {
+  font-style: italic;
+  color: #5bc0de;
+}
+
+.message ul, .message ol {
+  margin-bottom: 1em;
+  padding-left: 2em;
+}
+
+.message li {
+  margin-bottom: 0.5em;
+}
+
+.message code {
+  background-color: #f0f0f0;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-family: monospace;
+}
+
+.message pre {
+  background-color: #f0f0f0;
+  padding: 1em;
+  border-radius: 5px;
+  overflow-x: auto;
+  margin-bottom: 1em;
+}
+
+.message blockquote {
+  border-left: 4px solid #ccc;
+  padding-left: 1em;
+  margin-left: 0;
+  margin-bottom: 1em;
+  font-style: italic;
+  color: #666;
+}
+
+.message a {
+  color: #0366d6;
+  text-decoration: none;
+}
+
+.message a:hover {
+  text-decoration: underline;
+}
+
+.message table {
+  border-collapse: collapse;
+  margin-bottom: 1em;
+}
+
+.message th, .message td {
+  border: 1px solid #ccc;
+  padding: 0.5em;
+}
+
+.message th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
