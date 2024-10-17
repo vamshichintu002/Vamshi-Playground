@@ -325,7 +325,7 @@ export function Playground() {
         className="flex items-center justify-between p-2 sm:p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white"
       >
         <div className="flex items-center space-x-2 sm:space-x-4">
-          <Rabbit className="inline-block w-5 h-5 mr-1" /> {/* Added Rabbit icon here */}
+          <Rabbit className="inline-block w-5 h-5 mr-1" />
           <motion.h1 
             className="text-base sm:text-lg md:text-xl font-semibold truncate"
             initial={{ scale: 0.9 }}
@@ -337,22 +337,23 @@ export function Playground() {
           <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 hidden sm:inline">PLAYGROUND</span>
         </div>
         <div className="flex items-center space-x-2">
+          {/* Add the new social media buttons here */}
           <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="hidden sm:block"
+            className="flex space-x-2"
           >
             <Button variant="outline" size="sm" className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200" onClick={() => window.open('https://github.com/vamshichintu002/vamshichintu002', '_blank')}>
               <Github className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-              GitHub
+              <span className="hidden sm:inline">GitHub</span>
             </Button>
             <Button variant="outline" size="sm" className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200" onClick={() => window.open('https://www.linkedin.com/in/sudulavamshi/', '_blank')}>
               <Linkedin className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-              LinkedIn
+              <span className="hidden sm:inline">LinkedIn</span>
             </Button>
             <Button variant="outline" size="sm" className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200" onClick={() => window.open('https://www.instagram.com/vamshichintu02/', '_blank')}>
               <Instagram className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-              Instagram
+              <span className="hidden sm:inline">Instagram</span>
             </Button>
           </motion.div>
           <motion.div
