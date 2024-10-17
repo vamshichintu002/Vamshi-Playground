@@ -223,7 +223,7 @@ export function Playground() {
                 ) : (
                   <>
                     <p className="whitespace-pre-wrap">
-                      {message.content.replace(/'/g, "&apos;")}
+                      {message.content}
                     </p>
                     {message.image && (
                       <motion.div 
