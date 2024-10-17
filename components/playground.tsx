@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { Send, ExternalLink, Copy, Trash, Maximize2, Image as ImageIcon, Type, Moon, Sun, StopCircle, Zap, Clock, Hash, Rabbit, Github, Linkedin, Instagram } from 'lucide-react'
+import { Send, Copy, Trash, Maximize2, Image as ImageIcon, Type, Moon, Sun, StopCircle, Zap, Clock, Hash, Rabbit, Github, Linkedin, Instagram } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
@@ -103,7 +103,6 @@ export function Playground() {
   const [model, setModel] = useState('gemma2-9b-it')
   const [modalImage, setModalImage] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
-  const [arliaiStream, setArliaiStream] = useState<ReadableStream | null>(null)
   const [darkMode, setDarkMode] = useState(false)
   const [isGenerating, setIsGenerating] = useState(false)
   const abortControllerRef = useRef<AbortController | null>(null)
@@ -133,8 +132,8 @@ export function Playground() {
 
       try {
         let apiEndpoint: string
-        let body: any
-        let headers: HeadersInit = {
+        let body: Record<string, unknown>
+        const headers: HeadersInit = {
           'Content-Type': 'application/json'
         }
 
@@ -143,7 +142,7 @@ export function Playground() {
         if (arliAIModels.includes(model)) {
           apiEndpoint = 'https://api.arliai.com/v1/chat/completions'
           headers['Authorization'] = `Bearer ${process.env.NEXT_PUBLIC_ARLIAI_API_KEY}`
-          body = JSON.stringify({
+          body = {
             model: model,
             messages: [
               {"role": "system", "content": "You are a helpful assistant."},
@@ -156,13 +155,13 @@ export function Playground() {
             top_k: 40,
             max_tokens: 1024,
             stream: true
-          })
+          }
         } else if (model === 'XLabs-AI/flux-RealismLora') {
           apiEndpoint = "/api/huggingface"
-          body = JSON.stringify({ inputs: inputValue, model: 'XLabs-AI/flux-RealismLora' })
+          body = { inputs: inputValue, model: 'XLabs-AI/flux-RealismLora' }
         } else {
           apiEndpoint = '/api/groq'
-          body = JSON.stringify({ prompt: inputValue, model })
+          body = { prompt: inputValue, model }
         }
         
         setMessages(prev => [...prev, { role: 'assistant', content: 'loading' }])
@@ -173,7 +172,7 @@ export function Playground() {
         const res = await fetch(apiEndpoint, {
           method: 'POST',
           headers: headers,
-          body: body,
+          body: JSON.stringify(body),
           signal: abortControllerRef.current.signal
         })
 
