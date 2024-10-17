@@ -16,13 +16,12 @@ const models = {
     'llama-3.2-1b-preview',
     'llama-3.2-3b-preview',
     'llama-3.2-11b-vision-preview',
-    
     'llava-v1.5-7b-4096-preview',
-   
     'mixtral-8x7b-32768',
     'microsoft/phi-2',
     'microsoft/Phi-3.5-mini-instruct',
     'HuggingFaceH4/zephyr-7b-beta',
+    'Meta-Llama-3.1-8B-Instruct',
   ],
   imageGeneration: [
     'XLabs-AI/flux-RealismLora',

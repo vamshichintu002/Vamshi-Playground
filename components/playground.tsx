@@ -34,7 +34,7 @@ const LoadingAnimation = () => (
   </div>
 )
 
-const MessageBubble = motion(motion.div)
+const MessageBubble = motion.div
 
 const WelcomeMessage = () => (
   <TypeAnimation
@@ -50,6 +50,15 @@ const WelcomeMessage = () => (
   />
 )
 
+const CodeBlock = ({ content }: { content: string }) => (
+  <div className="my-2 overflow-hidden rounded-lg bg-gray-900 text-white">
+    <div className="bg-gray-800 px-4 py-2 font-mono text-sm">Python Code Output</div>
+    <pre className="p-4 overflow-x-auto">
+      <code>{content}</code>
+    </pre>
+  </div>
+);
+
 export function Playground() {
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -62,6 +71,7 @@ export function Playground() {
   const [model, setModel] = useState('gemma2-9b-it')
   const [modalImage, setModalImage] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const [arliaiStream, setArliaiStream] = useState<ReadableStream | null>(null)
 
   const isImageGenerationModel = model === 'XLabs-AI/flux-RealismLora'
 
@@ -81,7 +91,29 @@ export function Playground() {
       setIsLoading(true)
 
       try {
-        const apiEndpoint = model.startsWith('microsoft/') || model === 'HuggingFaceH4/zephyr-7b-beta' || model === 'XLabs-AI/flux-RealismLora' ? '/api/huggingface' : '/api/groq';
+        let apiEndpoint: string;
+        let body: any;
+
+        if (model === 'Meta-Llama-3.1-8B-Instruct') {
+          apiEndpoint = 'https://api.arliai.com/v1/chat/completions';
+          body = JSON.stringify({
+            model: "Meta-Llama-3.1-8B-Instruct",
+            messages: [
+              {"role": "system", "content": "You are a helpful assistant."},
+              ...messages.map(msg => ({ role: msg.role, content: msg.content })),
+              {"role": "user", "content": inputValue}
+            ],
+            repetition_penalty: 1.1,
+            temperature: 0.7,
+            top_p: 0.9,
+            top_k: 40,
+            max_tokens: 1024,
+            stream: true
+          });
+        } else {
+          apiEndpoint = model.startsWith('microsoft/') || model === 'HuggingFaceH4/zephyr-7b-beta' || model === 'XLabs-AI/flux-RealismLora' ? '/api/huggingface' : '/api/groq';
+          body = JSON.stringify({ prompt: inputValue, model });
+        }
         
         setMessages(prev => [...prev, { role: 'assistant', content: 'loading' }])
 
@@ -92,8 +124,9 @@ export function Playground() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            ...(model === 'Meta-Llama-3.1-8B-Instruct' ? {'Authorization': `Bearer ${process.env.NEXT_PUBLIC_ARLIAI_API_KEY}`} : {})
           },
-          body: JSON.stringify({ prompt: inputValue, model }),
+          body: body,
           signal: controller.signal
         })
 
@@ -119,20 +152,44 @@ export function Playground() {
             const { done, value } = await reader!.read()
             if (done) break
             const chunk = decoder.decode(value)
-            const lines = chunk.split('\n\n')
-            for (const line of lines) {
-              if (line.startsWith('data: ')) {
-                const data = JSON.parse(line.slice(6))
-                if (data.error) {
-                  throw new Error(data.details || 'An error occurred during streaming')
+            
+            if (model === 'Meta-Llama-3.1-8B-Instruct') {
+              // Handle ARLIAI SSE format
+              const lines = chunk.split('\n')
+              for (const line of lines) {
+                if (line.startsWith('data: ')) {
+                  const data = line.slice(5).trim()
+                  if (data === '[DONE]') {
+                    break
+                  }
+                  if (data) {  // Add this check
+                    try {
+                      const parsed = JSON.parse(data)
+                      assistantMessage += parsed.choices[0].delta.content || ''
+                    } catch (e) {
+                      console.error('Error parsing SSE data:', e)
+                    }
+                  }
                 }
-                assistantMessage += data.content || data.token?.text || ''
-                setMessages(prev => [
-                  ...prev.slice(0, -1),
-                  { role: 'assistant', content: assistantMessage }
-                ])
+              }
+            } else {
+              // Handle other API formats (existing code)
+              const lines = chunk.split('\n\n')
+              for (const line of lines) {
+                if (line.startsWith('data: ')) {
+                  const data = JSON.parse(line.slice(6))
+                  if (data.error) {
+                    throw new Error(data.details || 'An error occurred during streaming')
+                  }
+                  assistantMessage += data.content || data.token?.text || ''
+                }
               }
             }
+
+            setMessages(prev => [
+              ...prev.slice(0, -1),
+              { role: 'assistant', content: assistantMessage }
+            ])
           }
         }
       } catch (error) {
@@ -222,9 +279,11 @@ export function Playground() {
                   <WelcomeMessage />
                 ) : (
                   <>
-                    <p className="whitespace-pre-wrap">
-                      {message.content}
-                    </p>
+                    {message.content.includes('```python') ? (
+                      <CodeBlock content={message.content.split('```python')[1].split('```')[0].trim()} />
+                    ) : (
+                      <p className="whitespace-pre-wrap">{message.content}</p>
+                    )}
                     {message.image && (
                       <motion.div 
                         className="mt-2 relative"
