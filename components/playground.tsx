@@ -1,11 +1,12 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { Send, ExternalLink, Copy, Trash, Maximize2, Image as ImageIcon, Type, Moon, Sun, StopCircle, Zap, Clock, Hash } from 'lucide-react'
+import { Send, ExternalLink, Copy, Trash, Maximize2, Image as ImageIcon, Type, Moon, Sun, StopCircle, Zap, Clock, Hash, Rabbit, Github, Linkedin, Instagram } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import ReactMarkdown from 'react-markdown'
+import { Buffer } from 'buffer'
 
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
@@ -47,7 +48,7 @@ const MessageBubble = motion.div
 const WelcomeMessage = () => (
   <TypeAnimation
     sequence={[
-      "Hi there!\nWelcome to Vamshi's Playground. Explore the latest image and text generation models, all available for free.",
+      "Hi there!👋\nWelcome to Vamshi's Playground. Explore the latest image and text generation models, all available for free.",
       100,
       "How can I assist you today?",
     ]}
@@ -156,9 +157,9 @@ export function Playground() {
             max_tokens: 1024,
             stream: true
           })
-        } else if (model.startsWith('microsoft/') || model === 'HuggingFaceH4/zephyr-7b-beta' || model === 'XLabs-AI/flux-RealismLora') {
-          apiEndpoint = '/api/huggingface'
-          body = JSON.stringify({ prompt: inputValue, model })
+        } else if (model === 'XLabs-AI/flux-RealismLora') {
+          apiEndpoint = "/api/huggingface"
+          body = JSON.stringify({ inputs: inputValue, model: 'XLabs-AI/flux-RealismLora' })
         } else {
           apiEndpoint = '/api/groq'
           body = JSON.stringify({ prompt: inputValue, model })
@@ -179,15 +180,25 @@ export function Playground() {
         clearTimeout(timeoutId)
 
         if (!res.ok) {
-          const errorData = await res.json()
-          throw new Error(errorData.error?.message || `Failed to generate response: ${res.status} ${res.statusText}`)
+          const errorText = await res.text();
+          console.error('API Error:', errorText);
+          let errorMessage;
+          try {
+            const errorData = JSON.parse(errorText);
+            errorMessage = errorData.error || `Failed to generate response: ${res.status} ${res.statusText}`;
+          } catch {
+            errorMessage = `Failed to generate response: ${res.status} ${res.statusText}. Error: ${errorText}`;
+          }
+          throw new Error(errorMessage);
         }
 
         if (model === 'XLabs-AI/flux-RealismLora') {
-          const data = await res.json()
+          const imageBuffer = await res.arrayBuffer()
+          const base64Image = Buffer.from(imageBuffer).toString('base64')
+          const imageSrc = `data:image/jpeg;base64,${base64Image}`
           setMessages(prev => [
             ...prev.slice(0, -1),
-            { role: 'assistant', content: 'Image generated:', image: data.image }
+            { role: 'assistant', content: 'Image generated:', image: imageSrc }
           ])
         } else {
           const reader = res.body?.getReader()
@@ -322,13 +333,14 @@ export function Playground() {
         className="flex items-center justify-between p-2 sm:p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-white"
       >
         <div className="flex items-center space-x-2 sm:space-x-4">
+          <Rabbit className="inline-block w-5 h-5 mr-1" /> {/* Added Rabbit icon here */}
           <motion.h1 
             className="text-base sm:text-lg md:text-xl font-semibold truncate"
             initial={{ scale: 0.9 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
           >
-            ⚡ Vamshi&apos;s Chatbot 
+            Vamshi&apos;s Chatbot 
           </motion.h1>
           <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 hidden sm:inline">PLAYGROUND</span>
         </div>
@@ -338,9 +350,17 @@ export function Playground() {
             whileTap={{ scale: 0.95 }}
             className="hidden sm:block"
           >
-            <Button variant="outline" size="sm" className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200">
-              <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-              API Docs
+            <Button variant="outline" size="sm" className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200" onClick={() => window.open('https://github.com/vamshichintu002/vamshichintu002', '_blank')}>
+              <Github className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+              GitHub
+            </Button>
+            <Button variant="outline" size="sm" className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200" onClick={() => window.open('https://www.linkedin.com/in/sudulavamshi/', '_blank')}>
+              <Linkedin className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+              LinkedIn
+            </Button>
+            <Button variant="outline" size="sm" className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200" onClick={() => window.open('https://www.instagram.com/vamshichintu02/', '_blank')}>
+              <Instagram className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+              Instagram
             </Button>
           </motion.div>
           <motion.div
