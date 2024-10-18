@@ -35,7 +35,10 @@ export const models = {
 
 export function ModelSelector({ onSelectModel }: ModelSelectorProps) {
   return (
-    <Select onValueChange={onSelectModel} defaultValue={models.textGeneration[0]}>
+    <Select onValueChange={(value) => {
+      console.log("Model selected:", value); // Add this line for debugging
+      onSelectModel(value);
+    }} defaultValue={models.textGeneration[0]}>
       <SelectTrigger className="w-[300px] bg-gray-800 border-gray-700 text-white">
         <SelectValue placeholder="Select a model" />
       </SelectTrigger>

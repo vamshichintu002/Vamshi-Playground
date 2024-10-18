@@ -93,7 +93,7 @@ export function Playground() {
   ])
   const [inputValue, setInputValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [model, setModel] = useState('gemma2-9b-it')
+  const [model, setModel] = useState('gemma2-9b-it')  // Set a default model
   const [modalImage, setModalImage] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const [darkMode, setDarkMode] = useState(false)
@@ -115,7 +115,8 @@ export function Playground() {
   }, [darkMode])
 
   const handleSendMessage = async () => {
-    if (inputValue.trim()) {
+    if (inputValue.trim() && model) {  // Add model check here
+      console.log("Selected model:", model); // Add this line for debugging
       const startTime = Date.now()
       const newUserMessage: Message = { role: 'user', content: inputValue }
       setMessages(prev => [...prev, newUserMessage])
@@ -131,10 +132,15 @@ export function Playground() {
         }
 
         const arliAIModels = models.codeGeneration
-
+         
         if (arliAIModels.includes(model)) {
+          console.log("Using Arli AI API with model:", model);
+          if (!process.env.NEXT_PUBLIC_ARLIAI_API_KEY) {
+            throw new Error("Arli AI API key is not set");
+          }
           apiEndpoint = 'https://api.arliai.com/v1/chat/completions'
           headers['Authorization'] = `Bearer ${process.env.NEXT_PUBLIC_ARLIAI_API_KEY}`
+          headers['Content-Type'] = 'application/json'  // Add this line
           body = {
             model: model,
             messages: [
@@ -149,6 +155,8 @@ export function Playground() {
             max_tokens: 1024,
             stream: true
           }
+          console.log("Arli AI API request body:", JSON.stringify(body, null, 2));
+        
         } else if (model === 'XLabs-AI/flux-RealismLora') {
           apiEndpoint = "https://api-inference.huggingface.co/models/XLabs-AI/flux-RealismLora"
           body = { inputs: inputValue }
@@ -174,6 +182,11 @@ export function Playground() {
         if (!res.ok) {
           const errorText = await res.text()
           console.error('API Error:', errorText)
+          console.error('Request details:', {
+            apiEndpoint,
+            headers,
+            body: JSON.stringify(body, null, 2)
+          })
           throw new Error(`Failed to generate response: ${res.status} ${res.statusText}. Error: ${errorText}`)
         }
 
@@ -275,6 +288,15 @@ export function Playground() {
         setIsGenerating(false)
         abortControllerRef.current = null
       }
+    } else {
+      // Show an error message to the user
+      setMessages(prev => [
+        ...prev,
+        { 
+          role: 'assistant', 
+          content: 'Please select a model before sending a message.' 
+        }
+      ])
     }
   }
 
