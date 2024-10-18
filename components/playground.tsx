@@ -150,7 +150,7 @@ export function Playground() {
             stream: true
           }
         } else if (model === 'XLabs-AI/flux-RealismLora') {
-          apiEndpoint = "/api/huggingface"
+          apiEndpoint = "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-dev"
           body = { inputs: inputValue, model: 'XLabs-AI/flux-RealismLora' }
         } else {
           apiEndpoint = '/api/groq'
