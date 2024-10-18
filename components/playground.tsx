@@ -127,7 +127,7 @@ export function Playground() {
         let apiEndpoint: string
         let body: Record<string, unknown>
         const headers: HeadersInit = {
-          'Content-Type': 'application/json'
+          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_HUGGINGFACE_API_KEY}`
         }
 
         const arliAIModels = models.codeGeneration
@@ -150,8 +150,8 @@ export function Playground() {
             stream: true
           }
         } else if (model === 'XLabs-AI/flux-RealismLora') {
-          apiEndpoint = "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-dev"
-          body = { inputs: inputValue, model: 'XLabs-AI/flux-RealismLora' }
+          apiEndpoint = "https://api-inference.huggingface.co/models/XLabs-AI/flux-RealismLora"
+          body = { inputs: inputValue }
         } else {
           apiEndpoint = '/api/groq'
           body = { prompt: inputValue, model }
@@ -172,16 +172,9 @@ export function Playground() {
         clearTimeout(timeoutId)
 
         if (!res.ok) {
-          const errorText = await res.text();
-          console.error('API Error:', errorText);
-          let errorMessage;
-          try {
-            const errorData = JSON.parse(errorText);
-            errorMessage = errorData.error || `Failed to generate response: ${res.status} ${res.statusText}`;
-          } catch {
-            errorMessage = `Failed to generate response: ${res.status} ${res.statusText}. Error: ${errorText}`;
-          }
-          throw new Error(errorMessage);
+          const errorText = await res.text()
+          console.error('API Error:', errorText)
+          throw new Error(`Failed to generate response: ${res.status} ${res.statusText}. Error: ${errorText}`)
         }
 
         if (model === 'XLabs-AI/flux-RealismLora') {
@@ -310,6 +303,16 @@ export function Playground() {
       abortControllerRef.current.abort()
     }
   }
+
+  useEffect(() => {
+    return () => {
+      messages.forEach(message => {
+        if (message.image && message.image.startsWith('blob:')) {
+          URL.revokeObjectURL(message.image)
+        }
+      })
+    }
+  }, [messages])
 
   return (
     <motion.div 
